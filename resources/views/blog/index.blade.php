@@ -16,10 +16,9 @@
                 </p>
             </div>
 
-            <div class="mt-12 grid gap-8 grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
                 @forelse($posts as $post)
-                    <div class="flex flex-col rounded-2xl shadow-lg overflow-hidden hover:shadow-2xl transition-shadow duration-300 bg-white/80 backdrop-blur-sm border border-gray-100">
-                        <div class="flex-shrink-0">
+                    <div class="flex flex-col rounded-2xl shadow-lg overflow-hidden hover:shadow-2xl hover:shadow-brand-500/20 hover:-translate-y-1 transition-all duration-300 bg-white border border-gray-100 hover:border-brand-200 group">
+                        <div class="flex-shrink-0 relative">
                             @if($post->image)
                                 <img class="h-48 w-full object-cover" src="{{ asset('storage/' . $post->image) }}" alt="{{ $post->title }}">
                             @else

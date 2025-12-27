@@ -17,8 +17,9 @@
             </div>
 
             <!-- Mission Section -->
-            <div class="mt-20">
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
+            </div>
+            <div class="mt-20 py-20 bg-surface-50 -mx-4 sm:-mx-6 lg:-mx-8 px-4 sm:px-6 lg:px-8">
+                <div class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
                     <div class="relative">
                         <div class="absolute inset-0 bg-gradient-to-tr from-brand-600 to-secondary-600 rounded-3xl transform rotate-3 opacity-20"></div>
                         <img src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80" alt="Team working" class="relative rounded-3xl shadow-2xl transform -rotate-2 hover:rotate-0 transition duration-500 object-cover h-96 w-full">
@@ -34,6 +35,7 @@
                     </div>
                 </div>
             </div>
+            <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
             <div class="mt-24">
                 <h2 class="text-3xl font-bold text-center text-slate-900 mb-12">Meet the Team</h2>

@@ -1,8 +1,8 @@
 <x-site-layout :title="$post->title">
     <!-- Hero / Header -->
-    <div class="relative py-16 bg-white overflow-hidden">
+    <div class="relative py-16 bg-gradient-to-b from-surface-50 to-white overflow-hidden">
          <div class="absolute top-0 left-1/2 -translate-x-1/2 w-full h-full pointer-events-none -z-10">
-            <div class="absolute top-[-10%] left-[-10%] w-[500px] h-[500px] bg-brand-50/50 rounded-full mix-blend-multiply filter blur-3xl opacity-60"></div>
+            <div class="absolute top-[-10%] left-[-10%] w-[500px] h-[500px] bg-brand-100/40 rounded-full mix-blend-multiply filter blur-3xl opacity-60"></div>
         </div>
 
         <div class="relative px-4 sm:px-6 lg:px-8">

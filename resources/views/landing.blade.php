@@ -46,16 +46,20 @@
   </div>
 
   <!-- Features Section -->
-  <div class="py-24 border-t border-gray-100">
-    <div class="text-center mb-16">
-      <h2 class="text-3xl font-bold text-slate-900 mb-4">Semua yang Kamu Butuhkan</h2>
-      <p class="text-gray-500">Fitur esensial sudah terintegrasi, siap dikembangkan.</p>
-    </div>
+  <div class="py-24 bg-brand-50/30 relative overflow-hidden">
+    <div class="absolute top-0 right-0 w-1/3 h-full bg-white -skew-x-12 z-0 opacity-50"></div>
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+      <div class="text-center mb-16">
+        <h2 class="text-base font-semibold text-brand-600 uppercase tracking-wide">Features</h2>
+        <p class="mt-2 text-3xl leading-8 font-extrabold tracking-tight text-slate-900 sm:text-4xl">
+          Everything you need to build faster
+        </p>
+      </div>
 
-    <div class="grid md:grid-cols-3 gap-8">
-      <!-- Card 1 -->
-      <div class="group p-8 rounded-3xl bg-white border border-gray-100 shadow-xl shadow-gray-200/50 hover:shadow-2xl hover:shadow-brand-500/10 transition-all duration-300 hover:-translate-y-1">
-        <div class="w-14 h-14 rounded-2xl bg-brand-50 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300">
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-10">
+        <!-- Feature 1 -->
+        <div class="group p-8 bg-surface-50 rounded-3xl border border-brand-100 hover:border-brand-200 hover:shadow-xl hover:shadow-brand-500/10 transition-all duration-300">
+            <div class="w-14 h-14 bg-brand-100 rounded-2xl flex items-center justify-center text-brand-600 mb-6 group-hover:scale-110 transition-transform duration-300">
           <svg class="w-7 h-7 text-brand-600" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" /></svg>
         </div>
         <h3 class="text-xl font-bold text-slate-900 mb-3">Autentikasi Lengkap</h3>

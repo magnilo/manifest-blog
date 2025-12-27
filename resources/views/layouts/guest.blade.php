@@ -17,7 +17,7 @@
         <!-- Scripts -->
         @vite(['resources/css/app.css', 'resources/js/app.js'])
     </head>
-    <body class="font-sans text-slate-900 antialiased bg-slate-50 selection:bg-brand-500 selection:text-white">
+    <body class="font-sans text-slate-900 antialiased bg-gradient-to-br from-surface-50 via-white to-surface-100 selection:bg-brand-500 selection:text-white">
         <div class="min-h-screen flex flex-col sm:justify-center items-center pt-6 sm:pt-0 relative overflow-hidden">
             
             <!-- Decorative Background -->

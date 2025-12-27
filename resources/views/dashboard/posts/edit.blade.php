@@ -1,8 +1,11 @@
 <x-app-layout title="Edit Post">
     <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            {{ __('Edit Post') }}
-        </h2>
+        <a href="{{ route('dashboard.posts.index') }}" class="inline-flex items-center gap-2 text-slate-900 hover:text-slate-700 transition-colors group">
+             <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 group-hover:-translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+            </svg>
+            <span class="font-bold text-2xl leading-tight">{{ __('Edit Post') }}</span>
+        </a>
     </x-slot>
 
     <div class="py-12">

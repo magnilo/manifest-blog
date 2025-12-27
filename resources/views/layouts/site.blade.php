@@ -14,7 +14,7 @@
   @vite(['resources/css/app.css', 'resources/js/app.js'])
   <title>{{ isset($title) ? $title . ' - Manifest' : 'Manifest' }}</title>
 </head>
-<body class="font-sans antialiased bg-slate-50 text-slate-900 selection:bg-brand-500 selection:text-white">
+<body class="font-sans antialiased bg-gradient-to-br from-brand-50/50 via-white to-secondary-50/50 text-slate-900 selection:bg-brand-500 selection:text-white">
   <header x-data="{ mobileMenuOpen: false }" class="sticky top-0 z-50 w-full bg-white/80 backdrop-blur-md border-b border-gray-100/50">
     <div class="max-w-6xl mx-auto px-4 py-4 flex items-center justify-between">
       <a href="{{ url('/') }}" class="flex items-center gap-2 group">
