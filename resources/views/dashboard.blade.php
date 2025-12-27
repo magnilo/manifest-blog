@@ -40,7 +40,7 @@
                     </div>
                     <div>
                         <span class="block text-gray-500 text-sm">Posts</span>
-                        <span class="text-2xl font-bold text-slate-800">0</span>
+                        <span class="text-2xl font-bold text-slate-800">{{ $postsCount }}</span>
                     </div>
                 </div>
 
@@ -53,7 +53,7 @@
                     </div>
                     <div>
                         <span class="block text-gray-500 text-sm">Users</span>
-                        <span class="text-2xl font-bold text-slate-800">1</span>
+                        <span class="text-2xl font-bold text-slate-800">{{ $usersCount }}</span>
                     </div>
                 </div>
 

@@ -1,4 +1,4 @@
-<x-site-layout :title="'Contact'">
+<x-site-layout title="Contact Us">
     <div class="relative overflow-hidden pt-16 pb-20 lg:pt-24 lg:pb-28">
          <!-- Decorative Blobs -->
         <div class="absolute top-0 left-1/2 -translate-x-1/2 w-full h-full pointer-events-none -z-10">

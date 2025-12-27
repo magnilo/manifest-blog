@@ -12,10 +12,10 @@
   <link rel="icon" href="{{ asset('logo.svg') }}" type="image/svg+xml">
 
   @vite(['resources/css/app.css', 'resources/js/app.js'])
-  <title>{{ $title ?? 'Manifest' }}</title>
+  <title>{{ isset($title) ? $title . ' - Manifest' : 'Manifest' }}</title>
 </head>
 <body class="font-sans antialiased bg-slate-50 text-slate-900 selection:bg-brand-500 selection:text-white">
-  <header class="sticky top-0 z-50 w-full transition-all duration-300 bg-white/80 backdrop-blur-md border-b border-gray-100/50">
+  <header x-data="{ mobileMenuOpen: false }" class="sticky top-0 z-50 w-full bg-white/80 backdrop-blur-md border-b border-gray-100/50">
     <div class="max-w-6xl mx-auto px-4 py-4 flex items-center justify-between">
       <a href="{{ url('/') }}" class="flex items-center gap-2 group">
         <img src="{{ asset('logo.svg') }}" alt="Logo" class="w-8 h-8 rounded-lg shadow-md group-hover:scale-110 transition-transform duration-300">
@@ -25,6 +25,7 @@
       </a>
 
       <nav class="hidden md:flex items-center gap-8 font-medium text-sm text-gray-600">
+        <a class="hover:text-brand-600 transition-colors" href="{{ route('blog.index') }}">Blog</a>
         <a class="hover:text-brand-600 transition-colors" href="{{ route('about') }}">About</a>
         <a class="hover:text-brand-600 transition-colors" href="{{ route('contact') }}">Contact</a>
 

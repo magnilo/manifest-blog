@@ -28,14 +28,24 @@ Route::post('/contact', function (Request $request) {
     return back()->with('ok', 'Pesan kamu sudah terkirim (simulasi).');
 })->name('contact.submit');
 
+// Public Blog Routes
+Route::get('/blog', [App\Http\Controllers\BlogController::class, 'index'])->name('blog.index');
+Route::get('/blog/{post:slug}', [App\Http\Controllers\BlogController::class, 'show'])->name('blog.show');
+
 Route::middleware('auth')->group(function () {
     Route::get('/dashboard', function () {
-        return view('dashboard');
+        $postsCount = \App\Models\Post::where('user_id', auth()->id())->count();
+        $usersCount = \App\Models\User::count();
+        return view('dashboard', compact('postsCount', 'usersCount'));
     })->name('dashboard');
 
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+
+    // Blog Admin Routes
+    Route::resource('dashboard/posts', App\Http\Controllers\PostController::class)
+        ->names('dashboard.posts');
 });
 
 require __DIR__.'/auth.php';

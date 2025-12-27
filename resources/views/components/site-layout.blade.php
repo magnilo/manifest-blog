@@ -1,8 +1,6 @@
-@php
-  // Wrapper component
-@endphp
+@props(['title' => null])
 
 @include('layouts.site', [
-  'title' => $title ?? null,
+  'title' => $title,
   'slot' => $slot
 ])
