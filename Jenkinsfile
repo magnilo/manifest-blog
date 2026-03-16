@@ -14,6 +14,15 @@ node {
         '''
     }
 
+    stage("Fix Permissions") {
+        sh '''
+        docker compose exec -T app sh -c "
+            chown -R www-data:www-data /var/www/storage /var/www/bootstrap/cache &&
+            chmod -R 775 /var/www/storage /var/www/bootstrap/cache
+        "
+        '''
+    }
+
     stage("Laravel Setup") {
         sh 'docker compose exec -T app php artisan key:generate || true'
         sh 'docker compose exec -T app php artisan config:clear'
