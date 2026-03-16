@@ -1,6 +1,10 @@
 node {
     checkout scm
 
+    stage("Cleanup Old Containers") {
+        sh 'docker compose down || true'
+    }
+
     stage("Build Containers") {
         sh 'docker compose up -d --build'
     }
@@ -14,26 +18,18 @@ node {
         '''
     }
 
-    stage("Fix Permissions") {
+    stage("Build Frontend Assets") {
         sh '''
-        docker compose exec -T app sh -c "
-            chown -R www-data:www-data /var/www/storage /var/www/bootstrap/cache &&
-            chmod -R 775 /var/www/storage /var/www/bootstrap/cache
-        "
+        docker run --rm \
+          -v "$PWD":/app \
+          -w /app \
+          node:20 \
+          sh -c "npm install && npm run build"
         '''
     }
 
     stage("Laravel Setup") {
         sh 'docker compose exec -T app php artisan key:generate || true'
-        sh 'docker compose exec -T app php artisan config:clear'
-    }
-
-    stage("Database Migration") {
         sh 'docker compose exec -T app php artisan migrate --force'
-    }
-
-    stage("Testing") {
-        sh 'docker compose exec -T app php artisan --version'
-        sh 'echo "Pipeline Test Success"'
     }
 }
