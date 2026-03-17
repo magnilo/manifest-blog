@@ -66,6 +66,29 @@ node {
         sh 'docker compose exec -T app php artisan route:clear || true'
     }
 
+    stage("Wait For Database") {
+    sh '''
+    docker compose exec -T app sh -c '
+        until php -r "
+            try {
+                new PDO(
+                    \"mysql:host=mysql;port=3306;dbname=manifest-db\",
+                    \"admin\",
+                    \"manifest-password\"
+                );
+                echo \"ready\";
+            } catch (Exception $e) {
+                exit(1);
+            }
+        " >/dev/null 2>&1
+        do
+            echo "Waiting for MySQL..."
+            sleep 3
+        done
+    '
+    '''
+    }
+
     stage("Database Migration") {
         sh 'docker compose exec -T app php artisan migrate --force'
     }
