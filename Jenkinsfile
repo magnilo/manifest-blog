@@ -1,27 +1,24 @@
 node {
-    stage("Prepare Workspace") {
+    stage("Checkout") {
         checkout scm
     }
 
-    stage("Cleanup Project Containers") {
+    stage("Build") {
         sh 'docker compose down --remove-orphans || true'
-    }
-
-    stage("Build Containers") {
         sh 'docker compose up -d --build'
     }
 
-    stage("Install Composer Dependencies") {
-    sh '''
-    docker compose exec -T --user $(id -u):$(id -g) app sh -c "
-        export HOME=/tmp
-        git config --global --add safe.directory /var/www
-        composer install --no-interaction --prefer-dist
-    "
-    '''
-}
+    stage("Install Dependencies") {
+        sh '''
+        docker compose exec -T --user $(id -u):$(id -g) app sh -c "
+            export HOME=/tmp
+            git config --global --add safe.directory /var/www
+            composer install --no-interaction --prefer-dist
+        "
+        '''
+    }
 
-    stage("Build Frontend Assets") {
+    stage("Build Frontend") {
         sh '''
         docker run --rm \
           -u $(id -u):$(id -g) \
@@ -32,7 +29,7 @@ node {
         '''
     }
 
-    stage("Prepare Laravel Environment") {
+    stage("Prepare Environment") {
         sh '''
         test -f .env || cp .env.example .env
         sed -i 's/^DB_CONNECTION=.*/DB_CONNECTION=mysql/' .env
@@ -47,7 +44,7 @@ node {
         '''
     }
 
-    stage("Prepare Laravel Directories") {
+    stage("Testing") {
         sh '''
         mkdir -p storage/framework/cache/data
         mkdir -p storage/framework/sessions
@@ -57,49 +54,33 @@ node {
         mkdir -p bootstrap/cache
         chmod -R 775 storage bootstrap/cache || true
         '''
-    }
-
-    stage("Laravel Setup") {
         sh 'docker compose exec -T app php artisan key:generate || true'
         sh 'docker compose exec -T app php artisan config:clear'
         sh 'docker compose exec -T app php artisan view:clear || true'
         sh 'docker compose exec -T app php artisan route:clear || true'
+        sh 'docker compose exec -T app php artisan --version'
+        sh 'test -f public/build/manifest.json'
     }
 
-    stage("Wait For Database") {
-    sh '''
-    docker compose exec -T app sh -c '
-        until php -r "
+    stage("Deploy") {
+        sh '''
+        until docker compose exec -T app php -r "
             try {
                 new PDO(
-                    \"mysql:host=mysql;port=3306;dbname=manifest-db\",
-                    \"admin\",
-                    \"manifest-password\"
+                    'mysql:host=mysql;port=3306;dbname=manifest-db',
+                    'admin',
+                    'manifest-password'
                 );
-                echo \"ready\";
-            } catch (Exception $e) {
+                exit(0);
+            } catch (Exception \$e) {
                 exit(1);
             }
-        " >/dev/null 2>&1
-        do
+        "; do
             echo "Waiting for MySQL..."
             sleep 3
         done
-    '
-    '''
-    }
-
-    stage("Database Migration") {
+        '''
         sh 'docker compose exec -T app php artisan migrate --force'
-    }
-
-    stage("Clear Cache After Migration") {
         sh 'docker compose exec -T app php artisan cache:clear || true'
-    }
-
-    stage("Testing") {
-        sh 'docker compose exec -T app php artisan --version'
-        sh 'test -f public/build/manifest.json'
-        sh 'echo "Pipeline Test Success"'
     }
 }
