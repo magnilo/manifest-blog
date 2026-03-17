@@ -24,6 +24,7 @@ node {
     stage("Build Frontend Assets") {
         sh '''
         docker run --rm \
+          -u $(id -u):$(id -g) \
           -v "$PWD":/app \
           -w /app \
           node:20 \
