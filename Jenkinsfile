@@ -8,6 +8,11 @@ node {
         sh 'docker compose up -d --build'
     }
 
+    stage("Debug Containers") {
+        sh 'docker compose ps'
+        sh 'docker compose logs mysql || true'
+    }
+
     stage("Install Dependencies") {
         sh '''
         docker compose exec -T --user $(id -u):$(id -g) app sh -c "
@@ -64,13 +69,22 @@ node {
 
     stage("Deploy") {
         sh '''
-        docker compose exec -T app sh -c '
-            until mysql -hmysql -uadmin -pmanifest-password -e "USE manifest-db;" >/dev/null 2>&1; do
-                echo "Waiting for MySQL..."
-                sleep 3
-            done
-        '
+        MYSQL_ID=$(docker compose ps -q mysql)
+
+        if [ -z "$MYSQL_ID" ]; then
+            echo "MySQL container not found"
+            docker compose ps
+            docker compose logs mysql || true
+            exit 1
+        fi
+
+        until [ "$(docker inspect -f '{{if .State.Health}}{{.State.Health.Status}}{{else}}no-healthcheck{{end}}' "$MYSQL_ID")" = "healthy" ]; do
+            echo "Waiting for MySQL to become healthy..."
+            docker compose ps
+            sleep 3
+        done
         '''
+
         sh 'docker compose exec -T app php artisan migrate --force'
         sh 'docker compose exec -T app php artisan cache:clear || true'
     }
