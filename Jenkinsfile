@@ -1,6 +1,5 @@
 node {
     stage("Prepare Workspace") {
-        deleteDir()
         checkout scm
     }
 
@@ -14,7 +13,7 @@ node {
 
     stage("Install Composer Dependencies") {
         sh '''
-        docker compose exec -T app sh -c "
+        docker compose exec -T --user $(id -u):$(id -g) app sh -c "
             git config --global --add safe.directory /var/www &&
             composer install --no-interaction --prefer-dist
         "
