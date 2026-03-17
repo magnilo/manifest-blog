@@ -64,21 +64,12 @@ node {
 
     stage("Deploy") {
         sh '''
-        until docker compose exec -T app php -r "
-            try {
-                new PDO(
-                    'mysql:host=mysql;port=3306;dbname=manifest-db',
-                    'admin',
-                    'manifest-password'
-                );
-                exit(0);
-            } catch (Exception \$e) {
-                exit(1);
-            }
-        "; do
-            echo "Waiting for MySQL..."
-            sleep 3
-        done
+        docker compose exec -T app sh -c '
+            until mysql -hmysql -uadmin -pmanifest-password -e "USE manifest-db;" >/dev/null 2>&1; do
+                echo "Waiting for MySQL..."
+                sleep 3
+            done
+        '
         '''
         sh 'docker compose exec -T app php artisan migrate --force'
         sh 'docker compose exec -T app php artisan cache:clear || true'
