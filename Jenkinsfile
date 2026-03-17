@@ -41,6 +41,9 @@ node {
         sed -i 's/^DB_DATABASE=.*/DB_DATABASE=manifest-db/' .env
         sed -i 's/^DB_USERNAME=.*/DB_USERNAME=admin/' .env
         sed -i 's/^DB_PASSWORD=.*/DB_PASSWORD=manifest-password/' .env
+        grep -q '^CACHE_STORE=' .env && sed -i 's/^CACHE_STORE=.*/CACHE_STORE=file/' .env || echo 'CACHE_STORE=file' >> .env
+        grep -q '^SESSION_DRIVER=' .env && sed -i 's/^SESSION_DRIVER=.*/SESSION_DRIVER=file/' .env || echo 'SESSION_DRIVER=file' >> .env
+        grep -q '^QUEUE_CONNECTION=' .env && sed -i 's/^QUEUE_CONNECTION=.*/QUEUE_CONNECTION=sync/' .env || echo 'QUEUE_CONNECTION=sync' >> .env
         '''
     }
 
@@ -59,13 +62,16 @@ node {
     stage("Laravel Setup") {
         sh 'docker compose exec -T app php artisan key:generate || true'
         sh 'docker compose exec -T app php artisan config:clear'
-        sh 'docker compose exec -T app php artisan cache:clear'
-        sh 'docker compose exec -T app php artisan view:clear'
-        sh 'docker compose exec -T app php artisan route:clear'
+        sh 'docker compose exec -T app php artisan view:clear || true'
+        sh 'docker compose exec -T app php artisan route:clear || true'
     }
 
     stage("Database Migration") {
         sh 'docker compose exec -T app php artisan migrate --force'
+    }
+
+    stage("Clear Cache After Migration") {
+        sh 'docker compose exec -T app php artisan cache:clear || true'
     }
 
     stage("Testing") {
