@@ -31,6 +31,18 @@ node {
         '''
     }
 
+    stage("Prepare Laravel Environment") {
+        sh '''
+        test -f .env || cp .env.example .env
+        sed -i 's/^DB_CONNECTION=.*/DB_CONNECTION=mysql/' .env
+        sed -i 's/^DB_HOST=.*/DB_HOST=mysql/' .env
+        sed -i 's/^DB_PORT=.*/DB_PORT=3306/' .env
+        sed -i 's/^DB_DATABASE=.*/DB_DATABASE=manifest-db/' .env
+        sed -i 's/^DB_USERNAME=.*/DB_USERNAME=admin/' .env
+        sed -i 's/^DB_PASSWORD=.*/DB_PASSWORD=manifest-password/' .env
+        '''
+    }
+
     stage("Prepare Laravel Directories") {
         sh '''
         mkdir -p storage/framework/cache/data
