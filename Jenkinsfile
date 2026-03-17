@@ -1,8 +1,10 @@
 node {
-    deleteDir()
-    checkout scm
+    stage("Prepare Workspace") {
+        deleteDir()
+        checkout scm
+    }
 
-    stage("Cleanup Old Containers") {
+    stage("Cleanup Project Containers") {
         sh 'docker compose down --remove-orphans || true'
     }
 
@@ -14,7 +16,7 @@ node {
         sh '''
         docker compose exec -T app sh -c "
             git config --global --add safe.directory /var/www &&
-            composer install
+            composer install --no-interaction --prefer-dist
         "
         '''
     }
@@ -29,12 +31,15 @@ node {
         '''
     }
 
-    stage("Fix Permissions") {
+    stage("Prepare Laravel Directories") {
         sh '''
+        mkdir -p storage/framework/cache/data
+        mkdir -p storage/framework/sessions
+        mkdir -p storage/framework/views
+        mkdir -p storage/framework/testing
+        mkdir -p storage/logs
+        mkdir -p bootstrap/cache
         chmod -R 775 storage bootstrap/cache || true
-        docker compose exec -T app sh -c "
-            chmod -R 775 /var/www/storage /var/www/bootstrap/cache || true
-        "
         '''
     }
 
@@ -42,6 +47,8 @@ node {
         sh 'docker compose exec -T app php artisan key:generate || true'
         sh 'docker compose exec -T app php artisan config:clear'
         sh 'docker compose exec -T app php artisan cache:clear'
+        sh 'docker compose exec -T app php artisan view:clear'
+        sh 'docker compose exec -T app php artisan route:clear'
     }
 
     stage("Database Migration") {
