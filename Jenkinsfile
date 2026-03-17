@@ -12,13 +12,14 @@ node {
     }
 
     stage("Install Composer Dependencies") {
-        sh '''
-        docker compose exec -T --user $(id -u):$(id -g) app sh -c "
-            git config --global --add safe.directory /var/www &&
-            composer install --no-interaction --prefer-dist
-        "
-        '''
-    }
+    sh '''
+    docker compose exec -T --user $(id -u):$(id -g) app sh -c "
+        export HOME=/tmp
+        git config --global --add safe.directory /var/www
+        composer install --no-interaction --prefer-dist
+    "
+    '''
+}
 
     stage("Build Frontend Assets") {
         sh '''
